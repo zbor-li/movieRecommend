@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ysu.ldr.mapper.UserMapper">
+<!--    获取所有用户信息-->
+    <select id="getAllUser" resultType="User">
+        select * from user_info
+    </select>
+<!--    根据userName模糊查询用户信息-->
+    <select id="getUserByNameSearch" resultType="User">
+        select * from user_info where user_name like '%${userName}%'
+    </select>
+<!--    根据id查找用户更新其评论状态-->
+    <update id="updateUserStatusById">
+        update user_info set comment_status = #{commentStatus} where user_id = #{userId}
+    </update>
+    
+    <insert id="addUser" parameterType="User">
+        insert into user_info (user_name, `password`, gender, age, comment_status, registration_date, preference) values (#{userName}, #{password}, #{gender}, #{age}, #{commentStatus}, #{registrationDate}, #{preference})
+    </insert>
+
+    <update id="updateUser" parameterType="User">
+        UPDATE user_info SET
+            user_name = #{userName},
+            `password` = #{password},
+            gender = #{gender},
+            age = #{age},
+            comment_status = #{commentStatus},
+            registration_date = #{registrationDate}
+        WHERE user_id = #{userId}
+    </update>
+    
+    <delete id="deleteUser" parameterType="Integer">
+        delete from user_info where user_id = #{userId}
+    </delete>
+
+    <select id="getUserById" resultType="User">
+        select * from user_info where user_id = #{userId}
+    </select>
+
+    <select id="isLogin" resultType="User">
+        select * from user_info where user_name = #{userName}
+    </select>
+
+    <select id="getIdByName" resultType="Integer">
+        select user_id from user_info where user_name = #{userName}
+    </select>
+
+    <select id="getUserNameById" resultType="String">
+        select user_name from user_info where user_id = #{userId}
+    </select>
+
+</mapper>
