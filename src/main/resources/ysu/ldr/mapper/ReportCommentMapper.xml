@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ysu.ldr.mapper.ReportCommentMapper">
+    <select id="getAllReportComment" resultType="ReportComment">
+        SELECT *
+        FROM report_comment
+        <if test="reportType != null and reportType.size() > 0">
+            WHERE
+            <foreach collection="reportType" item="type" separator=" OR " open="(" close=")">
+                report_type LIKE CONCAT('%', #{type}, '%')
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getNoHandleReportComment" resultType="ReportComment">
+        SELECT *
+        FROM report_comment
+        WHERE
+        <if test="reportType == null or reportType.size() == 0">
+            handled = false
+        </if>
+        <if test="reportType != null and reportType.size() > 0">
+            <foreach collection="reportType" item="type" separator=" OR ">
+                report_type = #{type} AND handled = false
+            </foreach>
+        </if>
+    </select>
+    <update id="updateReportCommentStatusById" parameterType="ReportComment">
+        update report_comment set handled = #{reportCommentStatus} where report_id = #{reportId}
+    </update>
+    <delete id="deleteReportCommentById">
+        delete from report_comment where report_id = #{reportId}
+    </delete>
+
+    <insert id="addReportComment" parameterType="ReportComment">
+        insert into report_comment (comment_id, user_id, reportor_id, reason, report_type, `timestamp`, handled) values (#{commentId}, #{userId}, #{reportId}, #{reason}, #{reportType}, #{timestamp}, #{handled})
+    </insert>
+
+
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ysu.ldr.mapper.RecommendationMapper">
+
+    <insert id="insertUserCFRecommends">
+        insert into recommendation (user_id, recommends, type) values (#{userId}, #{recommends}, true)
+    </insert>
+    
+    <select id="getUserCFRecommends" resultType="String">
+        select recommends from recommendation where user_id = #{userId} and type = true;
+    </select>
+
+    <select id="getItemCFRecommends" resultType="String">
+        select recommends from recommendation where user_id = #{userId} and type = false;
+    </select>
+
+    <insert id="insertItemCFRecommends">
+        insert into recommendation (user_id, recommends, type) values (#{userId}, #{recommends}, false)
+    </insert>
+    
+    <delete id="deleteRecommends" parameterType="Integer">
+        delete from recommendation where user_id = #{userId}
+    </delete>
+
+</mapper>
